@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Initialize'){
+            steps{
+                echo "PATH = ${MAVEN_HOME}/bin:${PATH}"
+                echo "MAVEN_HOME = C:/Program Files/apache-maven-3.8.6"
+            }
+        }
+        stage('Build') {
+            steps {
+                dir("C:/Users/lbhar/.jenkins/workspace/oop/devopspipeline-project/") {
+                bat 'mvn -B -DskipTests clean package'
+                }
+            
+            }
+        }
+     }
+    post {
+       always {
+          junit(
+        allowEmptyResults: true,
+        testResults: '*/test-reports/.xml'
+      )
+      }
+   } 
+}
